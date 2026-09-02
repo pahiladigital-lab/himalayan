@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Himalayan Artisan Cafe — Bakery & Specialty Coffee | Jhamsikhel, Lalitpur</title>
+    <meta name="description" content="Himalayan Artisan Cafe — a warm, minimalist bakery and specialty coffee shop in Jhamsikhel, Lalitpur. Open daily 7 AM – 9 PM." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: '#FDFBF7',
+              espresso: '#2C1810',
+              amber: '#D97706',
+              'amber-light': '#F59E0B',
+              'amber-dark': '#B45309',
+            },
+            fontFamily: {
+              serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      html { scroll-behavior: smooth; }
+      body { font-family: 'Inter', system-ui, sans-serif; }
+      .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+      .menu-tab.active { background-color: #2C1810; color: #FDFBF7; }
+      .menu-panel { display: none; }
+      .menu-panel.active { display: block; }
+      .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+      .fade-up.visible { opacity: 1; transform: translateY(0); }
+      .hero-overlay {
+        background: linear-gradient(180deg, rgba(44,24,16,0.55) 0%, rgba(44,24,16,0.35) 50%, rgba(44,24,16,0.75) 100%);
+      }
+      /* ---- Loyalty Widget ---- */
+      .loyalty-fab {
+        box-shadow: 0 8px 30px rgba(217,119,6,0.4);
+        animation: fabPulse 2.5s ease-in-out infinite;
+      }
+      @keyframes fabPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      .loyalty-modal { transition: opacity 0.3s ease; }
+      .loyalty-modal.hidden-modal { opacity: 0; pointer-events: none; }
+      .loyalty-tab-btn.active {
+        background-color: #D97706;
+        color: #FDFBF7;
+      }
+      .loyalty-panel { display: none; }
+      .loyalty-panel.active { display: block; animation: panelIn 0.4s ease; }
+      @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      /* Mascot */
+      .mascot { animation: mascotBob 3s ease-in-out infinite; }
+      @keyframes mascotBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+      .mascot-celebrate { animation: mascotCelebrate 0.6s ease; }
+      @keyframes mascotCelebrate { 0%, 100% { transform: scale(1) rotate(0); } 25% { transform: scale(1.15) rotate(-8deg); } 75% { transform: scale(1.15) rotate(8deg); } }
+      .speech-bubble {
+        position: relative;
+        background: #FDFBF7;
+        border-radius: 12px;
+      }
+      .speech-bubble::after {
+        content: '';
+        position: absolute;
+        bottom: -8px; left: 50%; transform: translateX(-50%);
+        border: 8px solid transparent;
+        border-top-color: #FDFBF7;
+        border-bottom: 0;
+      }
+      /* Streak path */
+      .streak-node {
+        width: 48px; height: 48px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .streak-node.completed { background: #D97706; color: #FDFBF7; box-shadow: 0 4px 12px rgba(217,119,6,0.4); }
+      .streak-node.current { background: #F59E0B; color: #2C1810; box-shadow: 0 0 0 4px rgba(245,158,11,0.25); animation: currentPulse 1.5s ease-in-out infinite; }
+      .streak-node.locked { background: #2C1810; color: rgba(253,251,247,0.3); border: 2px dashed rgba(253,251,247,0.15); }
+      .streak-node.milestone { width: 56px; height: 56px; }
+      @keyframes currentPulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(245,158,11,0.25); } 50% { box-shadow: 0 0 0 10px rgba(245,158,11,0.1); } }
+      .streak-connector { width: 3px; height: 20px; background: rgba(253,251,247,0.15); margin: 0 auto; }
+      .streak-connector.lit { background: #D97706; }
+      /* Calendar */
+      .cal-day {
+        aspect-ratio: 1;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+      .cal-day.checked { background: #D97706; color: #FDFBF7; font-weight: 600; }
+      .cal-day.empty { opacity: 0; }
+      .cal-day.today { box-shadow: inset 0 0 0 2px #F59E0B; }
+      /* Stamp card */
+      .stamp-slot {
+        aspect-ratio: 1;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 12px;
+        border: 2px dashed rgba(44,24,16,0.15);
+        transition: all 0.3s ease;
+      }
+      .stamp-slot.stamped { background: rgba(217,119,6,0.08); border-color: #D97706; }
+      .stamp-slot.locked { opacity: 0.35; }
+      .stamp-slot.milestone { border-color: #D97706; border-style: solid; }
+      /* Confetti */
+      .confetti-piece {
+        position: fixed; width: 10px; height: 10px;
+        top: -10px; z-index: 9999;
+        animation: confettiFall linear forwards;
+      }
+      @keyframes confettiFall {
+        to { transform: translateY(105vh) rotate(720deg); opacity: 0.8; }
+      }
+      /* PIN modal */
+      .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(44,24,16,0.25); transition: all 0.2s ease; }
+      .pin-dot.filled { background: #D97706; border-color: #D97706; }
+      .pin-key {
+        height: 56px; font-size: 22px; font-weight: 600;
+        border-radius: 14px; transition: all 0.15s ease;
+      }
+      .pin-key:active { transform: scale(0.92); background: #D97706; color: #FDFBF7; }
+      .pin-error { animation: shake 0.4s ease; }
+      @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    </style>
+    <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+  <body class="bg-cream text-espresso antialiased">
+
+    <!-- ===================== STICKY HEADER ===================== -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream/95 backdrop-blur-md shadow-sm">
+      <nav class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="#hero" class="flex items-center gap-2 group">
+          <svg class="w-8 h-8 text-amber transition-transform duration-300 group-hover:rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 8h1a4 4 0 0 1 0 8h-1"/>
+            <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/>
+            <line x1="6" y1="2" x2="6" y2="4"/>
+            <line x1="10" y1="2" x2="10" y2="4"/>
+            <line x1="14" y1="2" x2="14" y2="4"/>
+          </svg>
+          <span class="font-serif text-lg md:text-xl font-bold tracking-tight leading-none">
+            Himalayan Artisan
+          </span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+          <li><a href="#hero" class="hover:text-amber transition-colors">Home</a></li>
+          <li><a href="#menu" class="hover:text-amber transition-colors">Menu</a></li>
+          <li><a href="#about" class="hover:text-amber transition-colors">About</a></li>
+          <li><a href="#location" class="hover:text-amber transition-colors">Location</a></li>
+        </ul>
+
+        <!-- Call/WhatsApp Button -->
+        <a href="https://wa.me/9779806690549" target="_blank" rel="noopener"
+           class="flex items-center gap-2 bg-amber hover:bg-amber-dark text-cream px-4 py-2 md:px-5 md:py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          <span class="hidden sm:inline">Call / WhatsApp</span>
+          <span class="sm:hidden">Call</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- ===================== HERO ===================== -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <!-- Background image -->
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.pexels.com/photos/35518412/pexels-photo-35518412.jpeg?auto=compress&cs=tinysrgb&w=1920"
+             alt="Warm and inviting cafe interior"
+             class="w-full h-full object-cover" />
+        <div class="absolute inset-0 hero-overlay"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 text-center px-6 max-w-3xl mx-auto pt-20">
+        <p class="text-amber-light font-medium tracking-widest uppercase text-xs sm:text-sm mb-4 fade-up" id="fade-1">
+          Bakery &amp; Specialty Coffee
+        </p>
+        <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-cream leading-tight mb-6 fade-up" id="fade-2">
+          Where Every Cup<br/>Tells a Story
+        </h1>
+        <p class="text-cream/85 text-base sm:text-lg md:text-xl max-w-xl mx-auto mb-8 leading-relaxed fade-up" id="fade-3">
+          Artisan coffee, freshly baked goods, and a warm corner of Jhamsikhel — crafted with care, served with love.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-up" id="fade-4">
+          <a href="#menu" class="bg-amber hover:bg-amber-dark text-cream px-8 py-3.5 rounded-full text-base font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105">
+            View Menu
+          </a>
+          <a href="#location" class="border border-cream/40 hover:border-cream text-cream px-8 py-3.5 rounded-full text-base font-semibold transition-all duration-300 hover:bg-cream/10">
+            Visit Us
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <svg class="w-6 h-6 text-cream/60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" class="py-20 md:py-28 bg-cream">
+      <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div class="fade-up">
+            <p class="text-amber font-medium tracking-widest uppercase text-xs mb-3">Our Story</p>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold mb-6 leading-tight">
+              Crafted in the Heart of Lalitpur
+            </h2>
+            <p class="text-espresso/70 text-base md:text-lg leading-relaxed mb-4">
+              At Himalayan Artisan Cafe, we believe great mornings start with great coffee. Our beans are
+              carefully roasted and our pastries baked fresh every day, blending Himalayan warmth with
+              artisan craft.
+            </p>
+            <p class="text-espresso/70 text-base md:text-lg leading-relaxed mb-8">
+              Whether you're here for a quick espresso, a leisurely breakfast, or just a quiet corner to
+              unwind — you're always welcome.
+            </p>
+            <div class="flex gap-8">
+              <div>
+                <p class="font-serif text-3xl font-bold text-amber">7 AM</p>
+                <p class="text-sm text-espresso/60">Open Daily</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-bold text-amber">100%</p>
+                <p class="text-sm text-espresso/60">Fresh Baked</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-bold text-amber">9 PM</p>
+                <p class="text-sm text-espresso/60">Open Until</p>
+              </div>
+            </div>
+          </div>
+          <div class="fade-up">
+            <img src="https://images.pexels.com/photos/810042/pexels-photo-810042.jpeg?auto=compress&cs=tinysrgb&w=900"
+                 alt="Cozy coffee shop interior"
+                 class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-2xl" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MENU ===================== -->
+    <section id="menu" class="py-20 md:py-28 bg-espresso text-cream">
+      <div class="max-w-5xl mx-auto px-5 sm:px-8">
+        <!-- Heading -->
+        <div class="text-center mb-12 fade-up">
+          <p class="text-amber-light font-medium tracking-widest uppercase text-xs mb-3">Our Menu</p>
+          <h2 class="font-serif text-3xl md:text-5xl font-bold mb-3">A Taste for Every Moment</h2>
+          <p class="text-cream/60 max-w-lg mx-auto">From single-origin pours to buttery croissants and hearty breakfast plates — explore what we're serving today.</p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="flex justify-center gap-2 sm:gap-3 mb-10 fade-up">
+          <button data-tab="coffee" class="menu-tab active px-5 sm:px-8 py-2.5 rounded-full text-sm font-semibold border border-cream/20 transition-all duration-300">
+            Coffee
+          </button>
+          <button data-tab="bakery" class="menu-tab px-5 sm:px-8 py-2.5 rounded-full text-sm font-semibold border border-cream/20 transition-all duration-300">
+            Bakery
+          </button>
+          <button data-tab="breakfast" class="menu-tab px-5 sm:px-8 py-2.5 rounded-full text-sm font-semibold border border-cream/20 transition-all duration-300">
+            Breakfast
+          </button>
+        </div>
+
+        <!-- Coffee Panel -->
+        <div id="coffee" class="menu-panel active fade-up">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <!-- Coffee items -->
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Espresso</h3>
+                <span class="text-amber-light font-semibold">Rs. 90</span>
+              </div>
+              <p class="text-cream/55 text-sm">A bold, concentrated shot of our house blend.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Cappuccino</h3>
+                <span class="text-amber-light font-semibold">Rs. 160</span>
+              </div>
+              <p class="text-cream/55 text-sm">Espresso topped with steamed milk and velvety foam.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Caffè Latte</h3>
+                <span class="text-amber-light font-semibold">Rs. 180</span>
+              </div>
+              <p class="text-cream/55 text-sm">Smooth espresso blended with creamy steamed milk and signature latte art.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Flat White</h3>
+                <span class="text-amber-light font-semibold">Rs. 170</span>
+              </div>
+              <p class="text-cream/55 text-sm">Double ristretto with micro-foamed milk — rich and silky.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Cold Brew</h3>
+                <span class="text-amber-light font-semibold">Rs. 210</span>
+              </div>
+              <p class="text-cream/55 text-sm">18-hour steeped, smooth and naturally sweet. Served over ice.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Mocha</h3>
+                <span class="text-amber-light font-semibold">Rs. 200</span>
+              </div>
+              <p class="text-cream/55 text-sm">Espresso, steamed milk, and rich dark chocolate.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Pour Over</h3>
+                <span class="text-amber-light font-semibold">Rs. 220</span>
+              </div>
+              <p class="text-cream/55 text-sm">Hand-brewed single-origin — ask about today's selection.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Hot Chocolate</h3>
+                <span class="text-amber-light font-semibold">Rs. 150</span>
+              </div>
+              <p class="text-cream/55 text-sm">Rich, velvety chocolate topped with whipped cream.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bakery Panel -->
+        <div id="bakery" class="menu-panel fade-up">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Butter Croissant</h3>
+                <span class="text-amber-light font-semibold">Rs. 120</span>
+              </div>
+              <p class="text-cream/55 text-sm">Flaky, buttery, and baked fresh every morning.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Almond Croissant</h3>
+                <span class="text-amber-light font-semibold">Rs. 180</span>
+              </div>
+              <p class="text-cream/55 text-sm">Filled with almond cream and topped with toasted almonds.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Pain au Chocolat</h3>
+                <span class="text-amber-light font-semibold">Rs. 150</span>
+              </div>
+              <p class="text-cream/55 text-sm">Classic chocolate-filled pastry with crisp, layered dough.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Cinnamon Roll</h3>
+                <span class="text-amber-light font-semibold">Rs. 160</span>
+              </div>
+              <p class="text-cream/55 text-sm">Soft, swirled dough with cinnamon sugar and cream cheese glaze.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Blueberry Muffin</h3>
+                <span class="text-amber-light font-semibold">Rs. 130</span>
+              </div>
+              <p class="text-cream/55 text-sm">Bursting with fresh blueberries and a crumbly sugar top.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Banana Bread Slice</h3>
+                <span class="text-amber-light font-semibold">Rs. 110</span>
+              </div>
+              <p class="text-cream/55 text-sm">Moist, warmly spiced, and toasted to order. Served with butter.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Chocolate Chip Cookie</h3>
+                <span class="text-amber-light font-semibold">Rs. 90</span>
+              </div>
+              <p class="text-cream/55 text-sm">Crisp edges, gooey center, and loaded with dark chocolate chunks.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Lemon Drizzle Cake</h3>
+                <span class="text-amber-light font-semibold">Rs. 140</span>
+              </div>
+              <p class="text-cream/55 text-sm">Tangy, tender sponge with a sweet citrus glaze.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakfast Panel -->
+        <div id="breakfast" class="menu-panel fade-up">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Classic English Breakfast</h3>
+                <span class="text-amber-light font-semibold">Rs. 450</span>
+              </div>
+              <p class="text-cream/55 text-sm">Eggs, sausages, baked beans, grilled tomato, toast, and hash browns.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Avocado Toast</h3>
+                <span class="text-amber-light font-semibold">Rs. 380</span>
+              </div>
+              <p class="text-cream/55 text-sm">Smashed avocado on sourdough, chili flakes, lime, and a poached egg.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Fluffy Pancakes</h3>
+                <span class="text-amber-light font-semibold">Rs. 350</span>
+              </div>
+              <p class="text-cream/55 text-sm">Stack of three with maple syrup, butter, and fresh berries.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Shakshuka</h3>
+                <span class="text-amber-light font-semibold">Rs. 420</span>
+              </div>
+              <p class="text-cream/55 text-sm">Eggs poached in spiced tomato and pepper sauce, served with bread.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Eggs Benedict</h3>
+                <span class="text-amber-light font-semibold">Rs. 480</span>
+              </div>
+              <p class="text-cream/55 text-sm">Poached eggs and ham on toasted English muffins with hollandaise.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">French Toast</h3>
+                <span class="text-amber-light font-semibold">Rs. 360</span>
+              </div>
+              <p class="text-cream/55 text-sm">Brioche soaked in vanilla custard, pan-fried, dusted with cinnamon sugar.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Veggie Breakfast Bowl</h3>
+                <span class="text-amber-light font-semibold">Rs. 390</span>
+              </div>
+              <p class="text-cream/55 text-sm">Roasted veggies, sautéed greens, avocado, and a soft-boiled egg.</p>
+            </div>
+            <div class="bg-espresso/40 border border-cream/10 rounded-xl p-6 hover:border-amber/40 transition-all duration-300">
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-serif text-xl font-semibold">Muesli &amp; Yogurt</h3>
+                <span class="text-amber-light font-semibold">Rs. 280</span>
+              </div>
+              <p class="text-cream/55 text-sm">House granola, Greek yogurt, seasonal fruit, and honey drizzle.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LOCATION & HOURS ===================== -->
+    <section id="location" class="py-20 md:py-28 bg-cream">
+      <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <div class="text-center mb-12 fade-up">
+          <p class="text-amber font-medium tracking-widest uppercase text-xs mb-3">Find Us</p>
+          <h2 class="font-serif text-3xl md:text-5xl font-bold mb-3">Come Say Hello</h2>
+          <p class="text-espresso/60 max-w-lg mx-auto">We're in the heart of Jhamsikhel, Lalitpur — open every day of the week.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+          <!-- Map -->
+          <div class="fade-up">
+            <div class="rounded-2xl overflow-hidden shadow-2xl h-72 md:h-full min-h-[320px] border border-espresso/10">
+              <iframe
+                src="https://www.google.com/maps?q=Jhamsikhel,Lalitpur,Kathmandu,Nepal&output=embed"
+                width="100%" height="100%" style="border:0; min-height: 320px;"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="Himalayan Artisan Cafe location map">
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Hours & Info -->
+          <div class="fade-up flex flex-col justify-center">
+            <div class="bg-white/60 border border-espresso/10 rounded-2xl p-6 md:p-8 shadow-lg">
+              <h3 class="font-serif text-2xl font-bold mb-4">Opening Hours</h3>
+              <div class="flex items-center gap-3 mb-6">
+                <span class="inline-flex items-center justify-center w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                <span class="text-sm font-medium text-green-700">Open Now</span>
+              </div>
+              <ul class="space-y-2 text-espresso/70">
+                <li class="flex justify-between items-center pb-2 border-b border-espresso/5">
+                  <span>Monday – Friday</span>
+                  <span class="font-semibold">7:00 AM – 9:00 PM</span>
+                </li>
+                <li class="flex justify-between items-center pb-2 border-b border-espresso/5">
+                  <span>Saturday</span>
+                  <span class="font-semibold">7:00 AM – 9:00 PM</span>
+                </li>
+                <li class="flex justify-between items-center">
+                  <span>Sunday</span>
+                  <span class="font-semibold">7:00 AM – 9:00 PM</span>
+                </li>
+              </ul>
+
+              <div class="mt-6 pt-6 border-t border-espresso/10">
+                <h3 class="font-serif text-xl font-bold mb-3">Contact</h3>
+                <p class="text-espresso/70 mb-1">Jhamsikhel, Lalitpur, Nepal</p>
+                <p class="text-espresso/70 mb-5">
+                  <a href="tel:+9779806690549" class="hover:text-amber transition-colors">+977 9806690549</a>
+                </p>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Jhamsikhel,Lalitpur,Kathmandu,Nepal"
+                   target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-cream px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                  Get Directions
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LOYALTY FLOATING WIDGET ===================== -->
+    <button id="loyaltyFab" class="loyalty-fab fixed bottom-5 right-5 z-40 flex items-center gap-2 bg-amber hover:bg-amber-dark text-cream pl-3 pr-5 py-3 rounded-full font-semibold text-sm shadow-lg transition-all duration-300 hover:scale-105">
+      <span class="text-xl">🎁</span>
+      <span class="hidden sm:inline">Rewards &amp; Streaks</span>
+      <span class="sm:hidden">Rewards</span>
+    </button>
+
+    <!-- ===================== LOYALTY MODAL ===================== -->
+    <div id="loyaltyModal" class="loyalty-modal hidden-modal fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+      <!-- Backdrop -->
+      <div id="loyaltyBackdrop" class="absolute inset-0 bg-espresso/60 backdrop-blur-sm"></div>
+
+      <!-- Modal Card -->
+      <div class="relative bg-cream w-full sm:max-w-md max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl shadow-2xl">
+        <!-- Header -->
+        <div class="sticky top-0 bg-espresso text-cream px-5 pt-5 pb-4 rounded-t-3xl z-10">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-serif text-xl font-bold">Cafe Rewards</h3>
+            <button id="loyaltyClose" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <!-- Tab Buttons -->
+          <div class="flex gap-2 bg-cream/10 rounded-full p-1">
+            <button data-ltab="streaks" class="loyalty-tab-btn active flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+              🔥 Daily Streaks
+            </button>
+            <button data-ltab="passport" class="loyalty-tab-btn flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+              📒 Visit Passport
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== TAB 1: DAILY STREAKS ===== -->
+        <div id="streaksPanel" class="loyalty-panel active px-5 py-5">
+          <!-- Mascot Header -->
+          <div class="flex items-center gap-4 mb-5">
+            <div id="streakMascot" class="mascot flex-shrink-0 w-16 h-16 rounded-full bg-amber/15 flex items-center justify-center text-3xl">
+              ☕
+            </div>
+            <div class="speech-bubble px-4 py-3 rounded-xl text-espresso text-sm font-medium flex-1">
+              <span id="streakBubble">You're on a <strong id="streakCountText">0</strong> day streak! Come back tomorrow to keep it going.</span>
+            </div>
+          </div>
+
+          <!-- Streak Path -->
+          <div class="bg-white/50 rounded-2xl p-4 mb-5 border border-espresso/5">
+            <p class="text-center text-xs font-semibold uppercase tracking-wider text-espresso/50 mb-4">7-Day Streak Path</p>
+            <div id="streakPath" class="flex flex-col items-center"></div>
+          </div>
+
+          <!-- Monthly Calendar -->
+          <div class="bg-white/50 rounded-2xl p-4 mb-5 border border-espresso/5">
+            <div class="flex items-center justify-between mb-3">
+              <button id="calPrev" class="w-8 h-8 rounded-full bg-espresso/5 hover:bg-espresso/10 flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <p id="calMonthLabel" class="font-serif text-lg font-bold"></p>
+              <button id="calNext" class="w-8 h-8 rounded-full bg-espresso/5 hover:bg-espresso/10 flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase text-espresso/40 mb-1">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
+          </div>
+
+          <!-- Check-in button -->
+          <button id="streakCheckIn" class="w-full bg-amber hover:bg-amber-dark text-cream py-3.5 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+            Check In at Counter
+          </button>
+          <p class="text-center text-xs text-espresso/40 mt-2">Ask staff to enter PIN at the counter</p>
+        </div>
+
+        <!-- ===== TAB 2: VISIT PASSPORT ===== -->
+        <div id="passportPanel" class="loyalty-panel px-5 py-5">
+          <!-- Mascot Header -->
+          <div class="flex items-center gap-4 mb-5">
+            <div id="passportMascot" class="mascot flex-shrink-0 w-16 h-16 rounded-full bg-amber/15 flex items-center justify-center text-3xl">
+              📒
+            </div>
+            <div class="speech-bubble px-4 py-3 rounded-xl text-espresso text-sm font-medium flex-1">
+              <span><strong id="visitCountText">0</strong>/10 Visits Completed — keep collecting stamps!</span>
+            </div>
+          </div>
+
+          <!-- Milestone rewards -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div id="reward5" class="rounded-2xl p-4 border-2 text-center transition-all duration-300">
+              <div class="text-2xl mb-1">🎉</div>
+              <p class="font-serif text-lg font-bold">Visit #5</p>
+              <p class="text-xs text-espresso/60">20% Off Next Order</p>
+            </div>
+            <div id="reward10" class="rounded-2xl p-4 border-2 text-center transition-all duration-300">
+              <div class="text-2xl mb-1">🏆</div>
+              <p class="font-serif text-lg font-bold">Visit #10</p>
+              <p class="text-xs text-espresso/60">Free Meal</p>
+            </div>
+          </div>
+
+          <!-- Stamp Card Grid -->
+          <div class="bg-white/50 rounded-2xl p-4 mb-5 border border-espresso/5">
+            <p class="text-center text-xs font-semibold uppercase tracking-wider text-espresso/50 mb-4">Stamp Card</p>
+            <div id="stampGrid" class="grid grid-cols-5 gap-3"></div>
+          </div>
+
+          <!-- Check-in button -->
+          <button id="passportCheckIn" class="w-full bg-amber hover:bg-amber-dark text-cream py-3.5 rounded-full font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+            Check In at Counter
+          </button>
+          <p class="text-center text-xs text-espresso/40 mt-2">Ask staff to enter PIN at the counter</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== STAFF PIN MODAL ===================== -->
+    <div id="pinModal" class="loyalty-modal hidden-modal fixed inset-0 z-[60] flex items-center justify-center">
+      <div id="pinBackdrop" class="absolute inset-0 bg-espresso/70 backdrop-blur-sm"></div>
+      <div class="relative bg-cream w-full max-w-xs mx-4 rounded-3xl shadow-2xl p-6">
+        <div class="text-center mb-5">
+          <div class="w-14 h-14 rounded-full bg-amber/15 flex items-center justify-center text-2xl mx-auto mb-3">🔐</div>
+          <h3 class="font-serif text-xl font-bold mb-1">Staff Validation</h3>
+          <p class="text-sm text-espresso/50">Enter 4-digit staff PIN</p>
+        </div>
+        <!-- PIN dots -->
+        <div id="pinDots" class="flex justify-center gap-3 mb-5">
+          <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+        </div>
+        <!-- Error msg -->
+        <p id="pinError" class="text-center text-sm text-red-500 font-medium mb-3" style="display:none;">Incorrect PIN. Try again.</p>
+        <!-- Keypad -->
+        <div class="grid grid-cols-3 gap-2.5">
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="1">1</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="2">2</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="3">3</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="4">4</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="5">5</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="6">6</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="7">7</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="8">8</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="9">9</button>
+          <button class="pin-key bg-transparent" data-pin="clear">⌫</button>
+          <button class="pin-key bg-espresso/5 hover:bg-espresso/10" data-pin="0">0</button>
+          <button id="pinCancel" class="pin-key bg-transparent text-sm font-medium text-espresso/50">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="bg-espresso text-cream py-14">
+      <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <div class="grid md:grid-cols-3 gap-8 mb-10">
+          <!-- Brand -->
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-7 h-7 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/>
+                <line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/>
+              </svg>
+              <span class="font-serif text-lg font-bold">Himalayan Artisan Cafe</span>
+            </div>
+            <p class="text-cream/55 text-sm leading-relaxed max-w-xs">
+              Bakery &amp; specialty coffee in Jhamsikhel, Lalitpur. Freshly baked, lovingly brewed, every single day.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="font-semibold text-sm uppercase tracking-wider text-amber-light mb-4">Explore</h4>
+            <ul class="space-y-2 text-sm text-cream/60">
+              <li><a href="#hero" class="hover:text-amber transition-colors">Home</a></li>
+              <li><a href="#menu" class="hover:text-amber transition-colors">Menu</a></li>
+              <li><a href="#about" class="hover:text-amber transition-colors">About</a></li>
+              <li><a href="#location" class="hover:text-amber transition-colors">Location &amp; Hours</a></li>
+            </ul>
+          </div>
+
+          <!-- Social -->
+          <div>
+            <h4 class="font-semibold text-sm uppercase tracking-wider text-amber-light mb-4">Follow Us</h4>
+            <div class="flex gap-4">
+              <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"
+                 class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-amber hover:border-amber transition-all duration-300">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"
+                 class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-amber hover:border-amber transition-all duration-300">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+              </a>
+              <a href="https://wa.me/9779806690549" target="_blank" rel="noopener" aria-label="WhatsApp"
+                 class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-amber hover:border-amber transition-all duration-300">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+              </a>
+            </div>
+            <p class="text-cream/40 text-sm mt-4">
+              <a href="tel:+9779806690549" class="hover:text-amber transition-colors">+977 9806690549</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- QR tagline + copyright -->
+        <div class="border-t border-cream/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-lg bg-cream/10 border border-cream/15 flex items-center justify-center">
+              <svg class="w-6 h-6 text-amber-light" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 11h.01M4 16h4M4 20h4M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
+            </div>
+            <p class="text-cream/50 text-sm max-w-xs">
+              Scan our QR code in-store for the full digital menu — always up to date.
+            </p>
+          </div>
+          <p class="text-cream/40 text-xs sm:text-sm">
+            &copy; 2026 Himalayan Artisan Cafe. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===================== JAVASCRIPT ===================== -->
+    <script>
+      // ---- Menu tabs ----
+      const tabs = document.querySelectorAll('.menu-tab');
+      const panels = document.querySelectorAll('.menu-panel');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.tab;
+          tabs.forEach((t) => t.classList.remove('active'));
+          panels.forEach((p) => p.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(target).classList.add('active');
+        });
+      });
+
+      // ---- Fade-up on scroll ----
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+      // ---- Hero entrance animation (staggered) ----
+      window.addEventListener('load', () => {
+        ['fade-1', 'fade-2', 'fade-3', 'fade-4'].forEach((id, i) => {
+          setTimeout(() => {
+            document.getElementById(id)?.classList.add('visible');
+          }, 200 + i * 250);
+        });
+      });
+
+      // ===================== LOYALTY SYSTEM =====================
+      const STAFF_PIN = '1234';
+      const STREAK_RESET_MS = 36 * 60 * 60 * 1000; // 36 hours
+
+      const defaultState = {
+        streak: 0,
+        lastScan: null,       // ISO timestamp of last check-in
+        scanDates: [],        // array of 'YYYY-MM-DD' strings
+        visits: 0,            // accumulated visits (0-10)
+        calMonth: null,      // {year, month} for calendar view
+      };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem('hac_loyalty');
+          if (!raw) return { ...defaultState, calMonth: getCurrentMonth() };
+          const parsed = JSON.parse(raw);
+          return { ...defaultState, ...parsed, calMonth: parsed.calMonth || getCurrentMonth() };
+        } catch {
+          return { ...defaultState, calMonth: getCurrentMonth() };
+        }
+      }
+
+      function saveState() {
+        const toSave = { ...state, calMonth: undefined };
+        localStorage.setItem('hac_loyalty', JSON.stringify(toSave));
+      }
+
+      function getCurrentMonth() {
+        const d = new Date();
+        return { year: d.getFullYear(), month: d.getMonth() };
+      }
+
+      let state = loadState();
+      let pinEntry = '';
+      let activeCheckInTab = null; // 'daily' or 'visit'
+
+      // Explicit reactive state variables (bound to localStorage)
+      let dailyStreakCount = state.streak;
+      let visitCount = state.visits;
+      let lastScanDate = state.lastScan;
+
+      // ---- Streak reset check ----
+      function checkStreakReset() {
+        if (state.lastScan) {
+          const elapsed = Date.now() - new Date(state.lastScan).getTime();
+          if (elapsed > STREAK_RESET_MS) {
+            state.streak = 0;
+            state.scanDates = [];
+            saveState();
+          }
+        }
+      }
+
+      // ---- Date helpers ----
+      function formatDate(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        return `${y}-${m}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+
+      function isSameDay(d1, d2) {
+        return formatDate(d1) === formatDate(d2);
+      }
+
+      // ---- Render Streak Path ----
+      function renderStreakPath() {
+        const path = document.getElementById('streakPath');
+        path.innerHTML = '';
+        const milestones = { 3: '🍪', 7: '☕' };
+        for (let day = 1; day <= 7; day++) {
+          const node = document.createElement('div');
+          node.className = 'streak-node';
+          const isMilestone = milestones[day];
+
+          if (isMilestone) node.classList.add('milestone');
+
+          if (day <= state.streak) {
+            node.classList.add('completed');
+            node.innerHTML = isMilestone ? milestones[day] : '🔥';
+          } else if (day === state.streak + 1) {
+            node.classList.add('current');
+            node.textContent = day;
+          } else {
+            node.classList.add('locked');
+            node.textContent = day;
+          }
+
+          // Milestone label
+          if (isMilestone) {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex flex-col items-center';
+            const label = document.createElement('p');
+            label.className = 'text-[10px] font-semibold text-espresso/50 mt-1.5';
+            label.textContent = day === 3 ? 'Free Cookie' : 'Free Cappuccino';
+            wrap.appendChild(node);
+            wrap.appendChild(label);
+            path.appendChild(wrap);
+          } else {
+            path.appendChild(node);
+          }
+
+          // Connector
+          if (day < 7) {
+            const conn = document.createElement('div');
+            conn.className = 'streak-connector' + (day <= state.streak ? ' lit' : '');
+            path.appendChild(conn);
+          }
+        }
+      }
+
+      // ---- Render Calendar ----
+      function renderCalendar() {
+        const { year, month } = state.calMonth;
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        document.getElementById('calMonthLabel').textContent = `${monthNames[month]} ${year}`;
+
+        const grid = document.getElementById('calGrid');
+        grid.innerHTML = '';
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const today = new Date();
+
+        // Empty cells
+        for (let i = 0; i < firstDay; i++) {
+          const e = document.createElement('div');
+          e.className = 'cal-day empty';
+          grid.appendChild(e);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const cell = document.createElement('div');
+          cell.className = 'cal-day';
+          cell.textContent = d;
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          if (state.scanDates.includes(dateStr)) {
+            cell.classList.add('checked');
+          }
+          if (year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
+            cell.classList.add('today');
+          }
+          grid.appendChild(cell);
+        }
+      }
+
+      // ---- Render Stamp Grid ----
+      function renderStampGrid() {
+        const grid = document.getElementById('stampGrid');
+        grid.innerHTML = '';
+        for (let i = 1; i <= 10; i++) {
+          const slot = document.createElement('div');
+          slot.className = 'stamp-slot';
+          const isMilestone = i === 5 || i === 10;
+          if (isMilestone) slot.classList.add('milestone');
+
+          if (i <= state.visits) {
+            slot.classList.add('stamped');
+            slot.innerHTML = '<span class="text-2xl">☕</span>';
+          } else {
+            slot.classList.add('locked');
+            slot.innerHTML = '<span class="text-xl text-espresso/20">☕</span>';
+          }
+
+          // Visit number badge
+          const badge = document.createElement('span');
+          badge.className = 'absolute text-[9px] font-bold text-espresso/40 mt-8';
+          badge.textContent = '#' + i;
+          slot.style.position = 'relative';
+          slot.appendChild(badge);
+
+          grid.appendChild(slot);
+        }
+
+        // Reward box states
+        const r5 = document.getElementById('reward5');
+        const r10 = document.getElementById('reward10');
+        if (state.visits >= 5) { r5.classList.remove('border-espresso/10','opacity-40'); r5.classList.add('border-amber','bg-amber/5'); }
+        else { r5.classList.add('border-espresso/10','opacity-40'); r5.classList.remove('border-amber','bg-amber/5'); }
+        if (state.visits >= 10) { r10.classList.remove('border-espresso/10','opacity-40'); r10.classList.add('border-amber','bg-amber/5'); }
+        else { r10.classList.add('border-espresso/10','opacity-40'); r10.classList.remove('border-amber','bg-amber/5'); }
+      }
+
+      // ---- Update all text ----
+      function updateText() {
+        document.getElementById('streakCountText').textContent = state.streak;
+        document.getElementById('visitCountText').textContent = state.visits;
+
+        // Streak bubble message
+        const bubble = document.getElementById('streakBubble');
+        if (state.streak === 0) {
+          bubble.innerHTML = 'Welcome! Check in daily to start your streak and earn free treats! 🎁';
+        } else if (state.streak >= 7) {
+          bubble.innerHTML = `Amazing! <strong>${state.streak}</strong> day streak! You've earned a free cappuccino! ☕`;
+        } else if (state.streak >= 3) {
+          bubble.innerHTML = `You're on a <strong>${state.streak}</strong> day streak! Keep it going! 🔥`;
+        } else {
+          bubble.innerHTML = `You're on a <strong>${state.streak}</strong> day streak! Come back tomorrow to keep it going.`;
+        }
+      }
+
+      function renderAll() {
+        checkStreakReset();
+        renderStreakPath();
+        renderCalendar();
+        renderStampGrid();
+        updateText();
+      }
+
+      // ---- Modal open/close ----
+      const loyaltyModal = document.getElementById('loyaltyModal');
+      const pinModal = document.getElementById('pinModal');
+
+      document.getElementById('loyaltyFab').addEventListener('click', () => {
+        renderLoyaltyUI();
+        loyaltyModal.classList.remove('hidden-modal');
+        document.body.style.overflow = 'hidden';
+      });
+      function closeLoyalty() {
+        loyaltyModal.classList.add('hidden-modal');
+        document.body.style.overflow = '';
+      }
+      document.getElementById('loyaltyClose').addEventListener('click', closeLoyalty);
+      document.getElementById('loyaltyBackdrop').addEventListener('click', closeLoyalty);
+
+      // ---- Loyalty tab switching ----
+      document.querySelectorAll('.loyalty-tab-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.loyalty-tab-btn').forEach((b) => b.classList.remove('active'));
+          document.querySelectorAll('.loyalty-panel').forEach((p) => p.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(btn.dataset.ltab + 'Panel').classList.add('active');
+        });
+      });
+
+      // ---- Calendar navigation ----
+      document.getElementById('calPrev').addEventListener('click', () => {
+        let { year, month } = state.calMonth;
+        month--; if (month < 0) { month = 11; year--; }
+        state.calMonth = { year, month };
+        renderCalendar();
+      });
+      document.getElementById('calNext').addEventListener('click', () => {
+        let { year, month } = state.calMonth;
+        month++; if (month > 11) { month = 0; year++; }
+        state.calMonth = { year, month };
+        renderCalendar();
+      });
+
+      // ---- Check-in buttons -> open PIN ----
+      function openPin(tab) {
+        pinEntry = '';
+        activeCheckInTab = tab;
+        updatePinDots();
+        document.getElementById('pinError').style.display = 'none';
+        pinModal.classList.remove('hidden-modal');
+      }
+      function closePin() {
+        pinModal.classList.add('hidden-modal');
+        pinEntry = '';
+        activeCheckInTab = null;
+        updatePinDots();
+      }
+      document.getElementById('streakCheckIn').addEventListener('click', () => openPin('daily'));
+      document.getElementById('passportCheckIn').addEventListener('click', () => openPin('visit'));
+      document.getElementById('pinCancel').addEventListener('click', closePin);
+      document.getElementById('pinBackdrop').addEventListener('click', closePin);
+
+      function updatePinDots() {
+        const dots = document.querySelectorAll('#pinDots .pin-dot');
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('filled', i < pinEntry.length);
+        });
+      }
+
+      // ---- PIN keypad ----
+      document.querySelectorAll('[data-pin]').forEach((key) => {
+        key.addEventListener('click', () => {
+          const val = key.dataset.pin;
+          if (val === 'clear') {
+            pinEntry = pinEntry.slice(0, -1);
+          } else if (pinEntry.length < 4) {
+            pinEntry += val;
+          }
+          updatePinDots();
+          if (pinEntry.length === 4) {
+            setTimeout(() => {
+              if (pinEntry === STAFF_PIN) {
+                // submitCheckIn() reads activeCheckInTab, so it must run
+                // BEFORE closePin() clears that value back to null.
+                submitCheckIn();
+                closePin();
+              } else {
+                document.getElementById('pinError').textContent = 'Incorrect Staff PIN';
+                document.getElementById('pinError').style.display = 'block';
+                document.querySelector('#pinModal .relative').classList.add('pin-error');
+                setTimeout(() => document.querySelector('#pinModal .relative').classList.remove('pin-error'), 400);
+                pinEntry = '';
+                updatePinDots();
+              }
+            }, 200);
+          }
+        });
+      });
+
+      // ---- PIN submit: increment active tab's counter ----
+      function submitCheckIn() {
+        const now = new Date();
+        const todayStr = formatDate(now);
+
+        if (activeCheckInTab === 'daily') {
+          // Prevent double check-in same day
+          if (state.scanDates.includes(todayStr)) {
+            renderLoyaltyUI();
+            triggerConfetti();
+            celebrateMascot('streakMascot');
+            return;
+          }
+          // Streak logic: consecutive day = +1, gap = reset to 1, first ever = 1
+          if (state.lastScan) {
+            const last = new Date(state.lastScan);
+            const diffDays = Math.round((now - last) / (24 * 60 * 60 * 1000));
+            if (diffDays === 1) {
+              dailyStreakCount = Math.min(dailyStreakCount + 1, 7);
+            } else if (diffDays > 1) {
+              dailyStreakCount = 1;
+            } else {
+              dailyStreakCount = Math.min(dailyStreakCount + 1, 7);
+            }
+          } else {
+            dailyStreakCount = 1;
+          }
+          lastScanDate = now.toISOString();
+          state.streak = dailyStreakCount;
+          state.lastScan = lastScanDate;
+          state.scanDates.push(todayStr);
+          saveState();
+        } else if (activeCheckInTab === 'visit') {
+          if (visitCount >= 10) {
+            renderLoyaltyUI();
+            triggerConfetti();
+            celebrateMascot('passportMascot');
+            return;
+          }
+          visitCount = Math.min(visitCount + 1, 10);
+          state.visits = visitCount;
+          saveState();
+        }
+
+        renderLoyaltyUI();
+        triggerConfetti();
+        if (activeCheckInTab === 'daily') celebrateMascot('streakMascot');
+        else celebrateMascot('passportMascot');
+      }
+
+      // ---- UI re-render (critical: updates all elements in real time) ----
+      function renderLoyaltyUI() {
+        // a) Text count elements
+        document.getElementById('streakCountText').textContent = dailyStreakCount;
+        document.getElementById('visitCountText').textContent = visitCount;
+
+        // Streak bubble message
+        // NOTE: streakCountText lives INSIDE this bubble, so every branch must
+        // re-include id="streakCountText" or the next render's getElementById
+        // call above will hit null and silently abort the whole re-render.
+        const bubble = document.getElementById('streakBubble');
+        if (dailyStreakCount === 0) {
+          bubble.innerHTML = 'Welcome! Check in daily to start your streak and earn free treats! 🎁<strong id="streakCountText" class="hidden">0</strong>';
+        } else if (dailyStreakCount >= 7) {
+          bubble.innerHTML = `Amazing! <strong id="streakCountText">${dailyStreakCount}</strong> day streak! You've earned a free cappuccino! ☕`;
+        } else if (dailyStreakCount >= 3) {
+          bubble.innerHTML = `You're on a <strong id="streakCountText">${dailyStreakCount}</strong> day streak! Keep it going! 🔥`;
+        } else {
+          bubble.innerHTML = `You're on a <strong id="streakCountText">${dailyStreakCount}</strong> day streak! Come back tomorrow to keep it going.`;
+        }
+
+        // b) Streak flame nodes
+        renderStreakPath();
+
+        // b) Passport stamp icons
+        renderStampGrid();
+
+        // c) Monthly calendar grid (highlight today + checked dates)
+        renderCalendar();
+      }
+
+      // ---- Celebrate mascot ----
+      function celebrateMascot(id) {
+        const mascot = document.getElementById(id);
+        mascot.classList.add('mascot-celebrate');
+        setTimeout(() => mascot.classList.remove('mascot-celebrate'), 600);
+      }
+
+      // ---- Confetti ----
+      function triggerConfetti() {
+        const colors = ['#D97706', '#F59E0B', '#B45309', '#FDFBF7', '#2C1810'];
+        for (let i = 0; i < 60; i++) {
+          const piece = document.createElement('div');
+          piece.className = 'confetti-piece';
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          piece.style.animationDelay = Math.random() * 0.5 + 's';
+          piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          piece.style.width = (Math.random() * 8 + 6) + 'px';
+          piece.style.height = (Math.random() * 8 + 6) + 'px';
+          document.body.appendChild(piece);
+          setTimeout(() => piece.remove(), 5000);
+        }
+      }
+
+      // ---- Init ----
+      checkStreakReset();
+      dailyStreakCount = state.streak;
+      visitCount = state.visits;
+      lastScanDate = state.lastScan;
+    </script>
+  </body>
+</html>
